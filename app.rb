@@ -34,6 +34,14 @@ helpers do
   end
 end
 
+get '/' do
+  @queries = mongo['queries'].find({},
+    :sort => [:created, :descending],
+    :fields => [:_id, :query, :user, :created]
+  )
+  erb :query_list
+end
+
 before '/query/new' do
   if !session[:identity]
     session[:previous_url] = request.path
@@ -62,10 +70,6 @@ end
 get '/query/:id' do
   @query = mongo['queries'].find_one(:_id => BSON::ObjectId(params[:id]))
   erb :query
-end
-
-get '/' do
-  erb 'A LIST OF QUERIES WILL GO HERE'
 end
 
 get '/login/form' do

@@ -1,0 +1,15 @@
+<style>
+  a.query-link {
+    color: black;
+  }
+</style>
+<table class="table">
+  <% @queries.each do |query| %>
+    <tr>
+      <td>
+        <a class="query-link" href="/query/<%= query['_id'] %>"><h2><%= query['query'] %></h2></a>
+        <span class="muted"><%= query['user'] %> on <%= Time.at(query['created']).strftime("%Y/%M/%d at %H:%M") %>
+      </td>
+    </tr>
+  <% end %>
+</table>
