@@ -32,6 +32,16 @@ before '/query/new' do
   end
 end
 
+get '/query/new' do
+  erb :query_form
+end
+
+post '/query/run' do
+  query = params[:query].strip
+  results = impala.query(query)
+  erb results.inspect
+end
+
 get '/' do
   erb 'A LIST OF QUERIES WILL GO HERE'
 end
