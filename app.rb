@@ -2,6 +2,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'impala'
+require 'mongo'
 
 IMPALA_HOST = 'virtualbox'
 IMPALA_PORT = 21000
@@ -12,6 +13,9 @@ configure do
 
   set :impala_host, 'virtualbox'
   set :impala_port, 21000
+
+  set :mongodb_host, 'localhost'
+  set :mongodb_port, 27017
 end
 
 helpers do
@@ -21,6 +25,12 @@ helpers do
 
   def impala
     @impala ||= Impala.connect(settings.impala_host, settings.impala_port)
+  end
+
+  def mongo
+    @mongo_client ||= Mongo::MongoClient.new(settings.mongodb_host,
+                                             settings.mongodb_port)
+    @mongo ||= @mongo_client['impala_herd']
   end
 end
 
@@ -39,7 +49,19 @@ end
 post '/query/run' do
   query = params[:query].strip
   results = impala.query(query)
-  erb results.inspect
+  id = mongo['queries'].insert({
+    :query => query,
+    :created => Time.now.to_i,
+    :user => username,
+    :results => results
+  })
+
+  redirect to "/query/#{id}"
+end
+
+get '/query/:id' do
+  @query = mongo['queries'].find_one(:_id => BSON::ObjectId(params[:id]))
+  erb :query
 end
 
 get '/' do

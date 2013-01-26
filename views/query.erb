@@ -1,0 +1,28 @@
+<div class="well">
+  <dl class="dl-horizontal">
+    <dt>Query</dt>
+    <dd><%= @query['query'] %></dd>
+    <dt>User</dt>
+    <dd><%= @query['user'] %></dd>
+    <dt>
+    <dt>Ran at</dt>
+    <dd><%= Time.at(@query['created']).strftime("%B %d, %Y at %H:%M") %></dd>
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <% keys = @query['results'].first.keys; keys.each do |k| %>
+          <th><%= k %></td>
+        <% end %>
+      </tr>
+    </thead>
+    <% @query['results'].each do |row| %>
+      <tr>
+        <% keys.each do |k| %>
+          <td><%= row[k] %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<div>
