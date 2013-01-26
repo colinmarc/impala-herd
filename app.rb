@@ -4,9 +4,6 @@ require 'sinatra'
 require 'impala'
 require 'mongo'
 
-IMPALA_HOST = 'virtualbox'
-IMPALA_PORT = 21000
-
 configure do
   set :public_folder, Proc.new { File.join(root, "static") }
   enable :sessions
