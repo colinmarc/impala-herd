@@ -8,7 +8,7 @@
     <tr>
       <td>
         <a class="query-link" href="/query/<%= query['_id'] %>"><h2><%= query['query'] %></h2></a>
-        <span class="muted"><%= query['user'] %> on <%= Time.at(query['created']).strftime("%Y/%M/%d at %H:%M") %>
+        <span class="muted"><%= query['user'] %> on <%= Time.at(query['created']).strftime("%Y/%M/%d at %H:%M") %></span>
       </td>
     </tr>
   <% end %>
