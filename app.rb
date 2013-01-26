@@ -1,6 +1,7 @@
 
 require 'rubygems'
 require 'sinatra'
+require 'impala'
 
 IMPALA_HOST = 'virtualbox'
 IMPALA_PORT = 21000
@@ -8,11 +9,18 @@ IMPALA_PORT = 21000
 configure do
   set :public_folder, Proc.new { File.join(root, "static") }
   enable :sessions
+
+  set :impala_host, 'virtualbox'
+  set :impala_port, 21000
 end
 
 helpers do
   def username
     session[:identity] ? session[:identity] : 'Hello stranger'
+  end
+
+  def impala
+    @impala ||= Impala.connect(settings.impala_host, settings.impala_port)
   end
 end
 
