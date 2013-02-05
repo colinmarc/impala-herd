@@ -7,6 +7,14 @@
     <dt>
     <dt>Ran at</dt>
     <dd><%= Time.at(@query['created']).strftime("%B %d, %Y at %H:%M") %></dd>
+    <dt>
+    <dt>Elapsed</dt>
+      <% if @query['elapsed'].to_f > 1.0 %>
+        <dd><%= @query['elapsed'] %> Seconds</dd>
+      <% else %>
+        <dd><%= (@query['elapsed'] * 1000.0) %> Milliseconds</dd>
+      <% end %>
+    </dt>
 </div>
 <div>
   <table class="table table-striped">
