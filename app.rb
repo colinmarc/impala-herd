@@ -34,7 +34,7 @@ end
 get '/' do
   @queries = mongo['queries'].find({},
     :sort => [:created, :descending],
-    :fields => [:_id, :query, :user, :created]
+    :fields => [:_id, :query, :user, :created, :elapsed]
   )
   erb :query_list
 end
@@ -53,12 +53,15 @@ end
 
 post '/query/run' do
   query = params[:query].strip
+  query_start_time = Time.now
   results = impala.query(query)
+  query_end_time = Time.now
   id = mongo['queries'].insert({
     :query => query,
     :created => Time.now.to_i,
     :user => username,
-    :results => results
+    :results => results,
+    :elapsed => query_end_time - query_start_time
   })
 
   redirect to "/query/#{id}"
